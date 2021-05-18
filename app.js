@@ -1,41 +1,31 @@
-let express=require("express");
-let app=express();
+const express=require('express');
+const multer=require('multer');//multerモジュールを読み込み
+const uuidv4=require('uuid/v4');
 
-app.set('view engin','ejs');
+const app=express();
+app.use(multer().none());
+//webフォルダの中身を公開する
+app.use(express.static('web1'));
 
-let port=pro.env.PORT||3000;
-app.listen(port);
-console.log("Listening on port"+port);
+//ポート
+let port =3000;
 
-let calulatePraime=(n)=>{
-    let prime=1;
-    for(let i=n;i>1;i--)
-    {
-        let is_prime=true;
-        for(let j=2;j<i;j++)
-        {
-            if(i%j==0)
-            {
-            is_prime=false;
-            break;
-        }
-    }
-    if(is_prime)
-    {
-        prime=i;
-        break;
-    }
-    }
-    return prime;
-}
-
-app.get('/'=(req,res)=>{
-if(req.query.n)
+//ルートにアクセスしたときにhelloを送信。
+app.get('/api/v1/list',(req,res)=>
 {
-    let prime=calulatePraime(req.query.n);
-    res.render('index',{n:req.query.n,prime:prime});
-}
-else{
-    res.render('index',{});
-}
+//クライントに送るjsonデータ
+const todoList=[
+    {title:'JavaScriptを勉強する',done:true},
+    {title:'Node.jsを勉強する',done:false},
+    {title:'Web APIを作る',done:false}
+];
+
+
+    //res.send('hello');
+
+    //JSONを送信
+    res.json(todoList);
 });
+
+
+app.listen(port,()=>console.log('Listening on Port 3000'));
